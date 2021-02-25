@@ -1,0 +1,5 @@
+query LaunchListA {
+  launches {
+    ...launchConnectionGraphFrag
+  }
+}
