@@ -6,9 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.coroutines.await
-import com.example.rocketreserver.fragment.LaunchConnectionGraphFrag
-import com.example.rocketreserver.fragment.LaunchGraphFrag
-import com.example.rocketreserver.fragment.MissionGraphFrag
+import com.example.rocketreserver.fragment.*
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -29,39 +27,39 @@ class MainActivity : AppCompatActivity() {
              * 在 graphql 使用 fragment 後，雖然兩個 query 查詢的內容一樣，
              * 但 [LaunchListAQuery.Data] 與 [LaunchListBQuery.Data] 型別判斷仍然不一樣，
              * 必須再尋找其子類別
-             * [LaunchListAQuery.Data.launches.fragments.launchConnectionGraphFrag]
-             * [LaunchListBQuery.Data.launches.fragments.launchConnectionGraphFrag]
-             * 方可得到共用的 data [LaunchConnectionGraphFrag]
+             * [LaunchListAQuery.Data.launches.fragments.launchesData]
+             * [LaunchListBQuery.Data.launches.fragments.launchesData]
+             * 方可得到共用的 data [LaunchesData]
              * */
             val launchListDataA = responseA.data
             val launchListA = toLaunchList(
-                launchListDataA?.launches?.fragments?.launchConnectionGraphFrag
+                launchListDataA?.launches?.fragments?.launchesData
             )
             printLaunchList(launchListA)
             val launchListDataB = responseB.data
             val launchListB = toLaunchList(
-                launchListDataB?.launches?.fragments?.launchConnectionGraphFrag
+                launchListDataB?.launches?.fragments?.launchesData
             )
             printLaunchList(launchListB)
         }
     }
 
-    private fun toLaunchList(frag: LaunchConnectionGraphFrag?): List<LaunchGraphFrag?>? {
-        return frag?.launches?.map { it?.fragments?.launchGraphFrag }
+    private fun toLaunchList(frag: LaunchesData?): List<LaunchData?>? {
+        return frag?.launches?.map { it?.fragments?.launchData }
     }
 
-    private fun printLaunchList(list: List<LaunchGraphFrag?>?) {
+    private fun printLaunchList(list: List<LaunchData?>?) {
         list?.forEach { printLaunch(it) }
     }
 
-    private fun printLaunch(launch: LaunchGraphFrag?) {
+    private fun printLaunch(launch: LaunchData?) {
         val id = launch?.id
-        printMission(launch?.mission?.fragments?.missionGraphFrag)
+        printMission(launch?.mission?.fragments?.missionData)
         val site = launch?.site
         Log.d("Launch", "id:${id}, site:${site}")
     }
 
-    private fun printMission(mission: MissionGraphFrag?) {
+    private fun printMission(mission: MissionData?) {
         val name = mission?.name
         Log.d("Mission", "name:${name}")
     }

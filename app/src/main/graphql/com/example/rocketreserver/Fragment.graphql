@@ -1,21 +1,21 @@
 # We should create fragment for all of types
 
-fragment launchConnectionGraphFrag on LaunchConnection {
+fragment launchesData on LaunchConnection {
   cursor
   hasMore
   launches{
-    ...launchGraphFrag
+    ...launchData
   }
 }
 
-fragment launchGraphFrag on Launch {
+fragment launchData on Launch {
   id
   site
   mission{
-    ...missionGraphFrag
+    ...missionData
   }
 }
 
-fragment missionGraphFrag on Mission {
+fragment missionData on Mission {
   name
 }
